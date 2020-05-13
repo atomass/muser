@@ -91,6 +91,15 @@ int main(int argc, char *argv[])
         err(EXIT_FAILURE, "missing MUSER device UUID");
     }
 
+    if (trans_sock) {
+        char *uuid = argv[optind];
+        for (int i = 0; i < strlen(uuid); i++) {
+            if (uuid[i] == '-') {
+                memmove(&uuid[i], &uuid[i + 1], strlen(uuid) - i);
+            }
+        }
+    }
+
     lm_dev_info_t dev_info = {
         .trans = trans_sock ? LM_TRANS_SOCK : LM_TRANS_KERNEL,
         .log = verbose ? _log : NULL,
